@@ -1,7 +1,7 @@
-import React from 'react'
-import Main from '../components/Main'
-import Row from '../components/Row'
-import requests from '../requests'
+import React from 'react';
+import Main from '../components/Main';
+import Row from '../components/Row';
+import requests from '../requests';
 
 const Home = () => {
   return (
@@ -14,7 +14,7 @@ const Home = () => {
       <Row rowId='5' title='Animation' fetchURL={requests.animation} />
       <Row rowId='6' title='Horror' fetchURL={requests.horror} />
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

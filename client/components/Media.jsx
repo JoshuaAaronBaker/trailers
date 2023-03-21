@@ -26,7 +26,7 @@ const Media = ({ item }) => {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default Media
+export default Media;

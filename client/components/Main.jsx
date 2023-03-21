@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
-import requests from "../requests";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import requests from '../requests';
+import axios from 'axios';
 import Youtube from 'react-youtube';
 
 const Main = () => {
   const [media, setMedia] = useState([]);
 
-  const banner = media[Math.floor(Math.random() * media.length)]
-
-
-
+  const banner = media[Math.floor(Math.random() * media.length)];
 
   useEffect(() => {
     axios.get(requests.popular)
