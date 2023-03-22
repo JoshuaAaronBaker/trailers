@@ -4,7 +4,6 @@ import AppContext from '../lib/AuthContext';
 const SignUp = () => {
 
   const value = useContext(AppContext);
-  console.log(value);
 
   const [credentials, setCredentials] = useState({
     username: '',
