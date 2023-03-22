@@ -1,4 +1,4 @@
-const key = '70b94eed4a018acf357f21fc77cb0078'
+const key = "70b94eed4a018acf357f21fc77cb0078";
 
 const requests = {
   api_key: `${key}`,
@@ -10,8 +10,7 @@ const requests = {
   animation: `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&query=animation&page=1&include_adult=false`,
   topRated: `https://api.themoviedb.org/3/movie/top_rated?api_key=${key}&language=en-US&page=1`,
   latest: `https://api.themoviedb.org/3/movie/latest?api_key=${key}&language=en-US`,
-  nowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${key}&language=en-US&page=1`
-
-}
+  nowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${key}&language=en-US&page=1`,
+};
 
 export default requests;

@@ -1,65 +1,24 @@
-import React, { useEffect, useState } from "react";
-import requests from "../requests";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import requests from '../requests';
+import axios from 'axios';
 import Youtube from 'react-youtube';
 
 const Main = () => {
   const [media, setMedia] = useState([]);
 
-  const banner = media[Math.floor(Math.random() * media.length)]
-
-
-
+  const banner = media[Math.floor(Math.random() * media.length)];
 
   useEffect(() => {
     axios.get(requests.popular)
-      .then((response) => {
+      .then(response => {
         setMedia(response.data.results);
-      })
+      });
   }, []);
-
-  // const fetchVideos = () => {
-  //   axios.get(`https://api.themoviedb.org/3/movie/${banner.id}/videos?api_key=${requests.api_key}&language=en-US`)
-  //     .then((response) => {
-  //       const movie = response.data.results
-  //       console.log(banner)
-  //       console.log(movie);
-  //       const trailer = movie.find(video => video.name === 'Official Trailer')
-  //       console.log(trailer.key);
-  //       return trailer.key;
-
-  //     })
-  // }
-
-  // console.log(fetchVideos());
-
-  // let key;
-
-  // useRef(() => {
-  //   key = fetchVideos();
-  // })
-
-  // console.log(key)
-
-  // function fetchVideos(videos) {
-  //   axios.get(`https://api.themoviedb.org/3/movie/${banner.id}/videos?api_key=${requests.api_key}&language=en-US`)
-  //   .then((response) => {
-  //      videos = response.data.results;
-  //      console.log(videos);
-  //   });
-  // }
-
-  // let videos;
-
-  // function renderPlayer() {
-  //   const trailer = videos.find(vid => vid.name === 'Official Trailer')
-  //   console.log(trailer);
-  // }
 
   return (
     <div className="w-full h-[700px] text-white">
       <div className="w-full h-full">
-        <div className="absolute w-full h-[700px] bg-gradient-to-r from-black"></div>
+        <div className="absolute w-full h-[700px] bg-gradient-to-r from-black" />
         {/* <Youtube
                                         videoId='M25zXBIUVr0'
                                         className={"youtube amru absolute z-10"}
