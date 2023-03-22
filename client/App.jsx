@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import SignUp from './components/SignUp';
+import LogIn from './components/LogIn';
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/sign-in" element={<LogIn />} />
         </Routes>
       </>
     </AppContext.Provider>

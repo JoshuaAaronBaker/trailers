@@ -6,11 +6,11 @@ drop schema "public" cascade;
 
 create schema "public";
 
-CREATE TABLE "public"."users" (
-	"userId" serial NOT NULL,
-	"username" TEXT NOT NULL UNIQUE,
-	"hashedPassword" TEXT NOT NULL,
-	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
-) WITH (
-  OIDS=FALSE
+create table "public"."users" (
+  "userId"         serial,
+  "username"       text           not null,
+  "hashedPassword" text           not null,
+  "createdAt"      timestamptz(6) not null default now(),
+  primary key ("userId"),
+  unique ("username")
 );
