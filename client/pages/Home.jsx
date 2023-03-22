@@ -15,6 +15,6 @@ const Home = () => {
       <Row rowId='6' title='Horror' fetchURL={requests.horror} />
     </>
   );
-}
+};
 
 export default Home;

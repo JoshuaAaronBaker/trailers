@@ -1,7 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-
 
 const Media = ({ item }) => {
 
@@ -27,6 +25,6 @@ const Media = ({ item }) => {
       </div>
     </div>
   );
-}
+};
 
 export default Media;
