@@ -1,13 +1,9 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import AppContext from '../lib/AuthContext';
 
 const SignUp = () => {
 
   const value = useContext(AppContext);
-
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
 
   const [credentials, setCredentials] = useState({
     username: '',
@@ -15,15 +11,11 @@ const SignUp = () => {
   });
 
   const handleChange = event => {
-    // setUsername({ ...username, [event.target.name]: event.target.value });
-    // console.log(username);
-    // setPassword({ ...password, [event.target.name]: event.target.value });
-    // console.log(password);
     setCredentials({ ...credentials, [event.target.name]: event.target.value });
 
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = event => {
     event.preventDefault();
     const action = window.location.pathname;
     const req = {
@@ -39,9 +31,9 @@ const SignUp = () => {
         if (action === '/sign-up') {
           window.location.pathname = '/sign-in';
         } else if (result.user && result.token) {
-          value.onSignIn(result);
+          value.handleSignIn(result);
         }
-      });
+      }).catch(err => console.error(err));
   };
 
   return (

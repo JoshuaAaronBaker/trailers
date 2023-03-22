@@ -13,14 +13,14 @@ function App() {
   const [isAuthorizing, setIsAuthorizing] = useState(true);
 
   useEffect(() => {
-    const token = window.localStorage.getItem('react-context-jwt');
+    const token = window.localStorage.getItem('trailerflix-jwt');
     const user = token ? jwtDecode(token) : null;
     setUser({ user });
     setIsAuthorizing(false);
   }
   , []);
 
-  const handleSignIn = () => {
+  const handleSignIn = result => {
     const { user, token } = result;
     window.localStorage.setItem('trailerflix-jwt', token);
     setUser({ user });
