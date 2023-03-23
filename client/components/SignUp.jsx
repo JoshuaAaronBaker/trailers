@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppContext from '../lib/AuthContext';
 
 const SignUp = () => {
@@ -9,6 +10,8 @@ const SignUp = () => {
     username: '',
     password: ''
   });
+
+  const navigate = useNavigate();
 
   const handleChange = event => {
     setCredentials({ ...credentials, [event.target.name]: event.target.value });
@@ -29,7 +32,7 @@ const SignUp = () => {
       .then(res => res.json())
       .then(result => {
         if (action === '/sign-up') {
-          window.location.pathname = '/sign-in';
+          navigate('/sign-in');
         } else if (result.user && result.token) {
           value.handleSignIn(result);
         }
