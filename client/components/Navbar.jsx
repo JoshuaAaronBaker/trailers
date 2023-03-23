@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AppContext from '../lib/AuthContext';
 
 const Navbar = () => {
+
   if (window.localStorage.getItem('trailerflix-jwt')) {
     return (
       <div className='flex items-center justify-between p-4 z-[100] w-full absolute'>
@@ -10,7 +12,6 @@ const Navbar = () => {
         </Link>
         <div>
           <button className='text-white pr-4'>Account</button>
-          <button className='bg-red-600 px-6 py-2 rounded cursor-pointer'>Sign Out</button>
           <Link to='/sign-in'>
             <button className='text-white pr-4 hidden'>Sign In</button>
           </Link>
@@ -40,3 +41,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+Navbar.contextType = AppContext;

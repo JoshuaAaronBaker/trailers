@@ -26,7 +26,12 @@ function App() {
     setUser({ user });
   };
 
-  const contextValue = { user, handleSignIn };
+  const handleSignOut = () => {
+    window.localStorage.removeItem('trailerflix-jwt');
+    setUser({ user: null });
+  };
+
+  const contextValue = { user, handleSignIn, handleSignOut };
   return (
     <AppContext.Provider value={contextValue}>
       <>
