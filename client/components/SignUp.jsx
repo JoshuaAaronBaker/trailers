@@ -64,4 +64,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-SignUp.contextType = AppContext;
