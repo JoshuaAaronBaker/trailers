@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import AppContext from '../lib/AuthContext';
+import Redirect from './Redirect';
 
 const SignUp = () => {
 
@@ -10,8 +10,6 @@ const SignUp = () => {
     username: '',
     password: ''
   });
-
-  const navigate = useNavigate();
 
   const handleChange = event => {
     setCredentials({ ...credentials, [event.target.name]: event.target.value });
@@ -32,12 +30,16 @@ const SignUp = () => {
       .then(res => res.json())
       .then(result => {
         if (action === '/sign-up') {
-          navigate('/sign-in');
+          window.location.hash = 'sign-in';
         } else if (result.user && result.token) {
           value.handleSignIn(result);
         }
       }).catch(err => console.error(err));
   };
+
+  if (value.user && window.localStorage.getItem('trailerflix-jwt')) {
+    return <Redirect to=''/>;
+  }
 
   return (
     <div className='w-full h-screen'>
@@ -53,7 +55,7 @@ const SignUp = () => {
               <button type='submit' className='bg-red-600 py-3 my-6 rounded font-bold'>Sign Up</button>
             </form>
             <div>
-              <a href="">Sign-in with Demo User</a>
+              <a href='#sign-in'>Already a member? Sign In</a>
             </div>
           </div>
 
@@ -64,4 +66,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-SignUp.contextType = AppContext;

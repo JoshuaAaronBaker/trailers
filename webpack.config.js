@@ -20,6 +20,9 @@ module.exports = {
   output: {
     path: serverPublicPath
   },
+  devServer: {
+    historyApiFallback: true
+  },
   module: {
     rules: [
       {

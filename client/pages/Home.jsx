@@ -4,6 +4,7 @@ import Row from '../components/Row';
 import requests from '../requests';
 
 const Home = () => {
+
   return (
     <>
       <Main />
