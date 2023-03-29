@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import AppContext from '../lib/AuthContext';
 
 const Navbar = () => {
@@ -19,9 +18,7 @@ const Navbar = () => {
   if (window.localStorage.getItem('trailerflix-jwt')) {
     return (
       <div className='flex items-center justify-between p-4 z-[100] w-full absolute'>
-        <Link to='/'>
-          <h1 className='text-red-600 text-4xl font-bold cursor-pointer'>TRAILERFLIX</h1>
-        </Link>
+        <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
         <div>
           <button className='text-white bg-red-600 px-6 py-2 rounded cursor-pointer'
           onClick={() => handleModal()}
@@ -42,28 +39,18 @@ const Navbar = () => {
               </div>
             </div>)
             : null}
-          <Link to='/sign-in'>
-            <button className='text-white pr-4 hidden'>Sign In</button>
-          </Link>
-          <Link to='/sign-up'>
-            <button className='bg-red-600 px-6 py-2 rounded cursor-pointer hidden'>Sign Up</button>
-          </Link>
+          <a className='text-white pr-4 hidden' href='#sign-in'>Sign In</a>
+          <a className='bg-red-600 px-6 py-2 rounded cursor-pointer hidden' href='#sign-up'>Sign Up</a>
         </div>
       </div>
     );
   }
   return (
     <div className='flex items-center justify-between p-4 z-[100] w-full absolute'>
-      <Link to='/'>
-        <h1 className='text-red-600 text-4xl font-bold cursor-pointer'>TRAILERFLIX</h1>
-      </Link>
+      <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
       <div>
-        <Link to='/sign-in'>
-          <button className='text-white pr-4 cursor-pointer'>Sign In</button>
-        </Link>
-        <Link to='/sign-up'>
-          <button className='bg-red-600 px-6 py-2 rounded cursor-pointer'>Sign Up</button>
-        </Link>
+        <a className='text-white pr-4 cursor-pointer' href='#sign-in'>Sign In</a>
+        <a className='bg-red-600 px-6 py-2 rounded cursor-pointer' href='#sign-up'>Sign Up</a>
       </div>
     </div>
   );

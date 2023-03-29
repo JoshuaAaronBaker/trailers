@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import parseRoute from './lib/parse-route';
 import AppContext from './lib/AuthContext';
 import jwtDecode from 'jwt-decode';
 import Navbar from './components/Navbar';
@@ -11,8 +11,12 @@ function App() {
 
   const [user, setUser] = useState(null);
   const [isAuthorizing, setIsAuthorizing] = useState(true);
+  const [route, setRoute] = useState(parseRoute(window.location.hash));
 
   useEffect(() => {
+    window.addEventListener('hashchange', () => {
+      setRoute(parseRoute(window.location.hash));
+    });
     const token = window.localStorage.getItem('trailerflix-jwt');
     const user = token ? jwtDecode(token) : null;
     setUser({ user });
@@ -31,16 +35,26 @@ function App() {
     setUser({ user: null });
   };
 
-  const contextValue = { user, handleSignIn, handleSignOut };
+  const renderPage = () => {
+    const { path } = route;
+
+    if (path === '') {
+      return <Home />;
+    }
+    if (path === 'sign-in') {
+      return <LogIn />;
+    }
+    if (path === 'sign-up') {
+      return <SignUp />;
+    }
+  };
+
+  const contextValue = { user, route, handleSignIn, handleSignOut };
   return (
     <AppContext.Provider value={contextValue}>
       <>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/sign-in" element={<LogIn />} />
-        </Routes>
+        {renderPage()}
       </>
     </AppContext.Provider>
   );
