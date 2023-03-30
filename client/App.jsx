@@ -10,7 +10,6 @@ import LogIn from './components/LogIn';
 function App() {
 
   const [user, setUser] = useState(null);
-  const [isAuthorizing, setIsAuthorizing] = useState(true);
   const [route, setRoute] = useState(parseRoute(window.location.hash));
 
   useEffect(() => {
@@ -20,7 +19,6 @@ function App() {
     const token = window.localStorage.getItem('trailerflix-jwt');
     const user = token ? jwtDecode(token) : null;
     setUser({ user });
-    setIsAuthorizing(false);
   }
   , []);
 
