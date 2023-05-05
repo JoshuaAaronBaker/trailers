@@ -89,7 +89,7 @@ const Main = () => {
                     <div className='max-w-[700px] h-[400px] mx-auto bg-black/75 text-white'>
                       <div className='max-w-[320px] mx-auto py-16'>
                         <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <h1 className='text-lg'>Sorry, there is no trailer availble for this movie.</h1>
+                        <h1 className='text-lg'>Sorry, there are no trailers available for {banner.title}.</h1>
                         <button className='bg-red-600 px-6 py-2 mt-6 rounded cursor-pointer' onClick={() => handleNotFound()}>Ok</button>
                       </div>
                     </div>
