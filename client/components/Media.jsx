@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import YouTube from 'react-youtube';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import PlayerCard from './PlayerCard';
 
 const Media = ({ item }) => {
 
@@ -41,38 +41,7 @@ const Media = ({ item }) => {
             </p>
             <div>
               <button className='border bg-gray-300 text-black border-gray-300 py-1 px-1 text-xs mt-5' onClick={() => watchTrailer()}>Watch</button>
-              {playTrailer
-                ? (<div className='w-full h-screen absolute'>
-                  <div className='bg-black/60 fixed top-0 left-0 w-full h-screen'>
-                    <div className='fixed w-full h-screen z-50'>
-                      <div>
-                        <YouTube videoId={key.key ? key.key : null}
-              className="youtube amru absolute z-10 w-full h-full object-cover"
-              containerClassName="youtube-container amru"
-              opts={
-                  {
-                    width: '100%',
-                    height: '100%',
-                    title: '',
-                    playerVars: {
-                      autoplay: 1,
-                      controls: 1,
-                      cc_load_policy: 0,
-                      fs: 0,
-                      iv_load_policy: 0,
-                      modestbranding: 0,
-                      rel: 0,
-                      showinfo: 0
-                    }
-                  // eslint-disable-next-line react/jsx-indent
-                  }
-              }/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                  )
-                : null}
+              {playTrailer ? <button className='absolute z-10 bottom-4 ml-4 border bg-gray-300 text-black border-gray-300 py-2 px-5 hover:bg-red-600 hover:border-red-600 hover:text-gray-300' onClick={() => setPlayTrailer(false)}>Close</button> : null}
             </div>
           </div>
         </div>
