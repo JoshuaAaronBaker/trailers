@@ -54,7 +54,7 @@ const Main = () => {
         {playTrailer
           ? <Youtube
               videoId={key.key ? key.key : null}
-              className="youtube amru absolute z-10 w-full h-full object-cover "
+              className="youtube amru absolute z-10 w-full h-full"
               containerClassName="youtube-container amru"
               opts={
                   {

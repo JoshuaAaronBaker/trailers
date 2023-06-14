@@ -3,20 +3,18 @@ import axios from 'axios';
 import YouTube from 'react-youtube';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Player from './Player';
-import Link from 'react-router-dom';
 
 const Media = ({ item }) => {
 
   const [watchClicked, setWatchClicked] = useState(false);
   const [like, setLike] = useState(false);
-  const [key, setKey] = useState(null);
+  const [key, setKey] = useState('');
   const [playTrailer, setPlayTrailer] = useState(false);
   const [noTrailer, setNoTrailer] = useState(false);
 
   const watchTrailer = () => {
     axios.get(`https://api.themoviedb.org/3/movie/${item.id}?api_key=${process.env.MOVIEDB_API_KEY}&append_to_response=videos`)
       .then(response => {
-        console.log(response.data);
         const trailer = response.data.videos.results.find(vid => vid.name === 'Official Trailer');
         if (response.data.videos.results.length === 0) {
           setKey('');
@@ -40,20 +38,21 @@ const Media = ({ item }) => {
       .then(response => {
         let trailer = response.data.videos.results.find(vid => vid.name === 'Official Trailer');
         if (response.data.videos.results.length === 0) {
-          return <Player trailer={response.data}/>;
+          return <Player trailer={response.data} playTrailer={playTrailer} noTrailer={noTrailer} />;
         } else if (trailer) {
           console.log(trailer);
-          return <Player trailer={trailer} />;
+          return <Player trailer={trailer} playTrailer={playTrailer} noTrailer={noTrailer}/>;
         } else if (!trailer) {
           trailer = response.data.videos.results[0];
-          return <Player trailer={trailer} />;
+          return <Player trailer={trailer} playTrailer={playTrailer} noTrailer={noTrailer} />;
         }
       });
     console.log('button was clicked');
   };
 
   if (watchClicked) {
-    return <Player trailer={key} />;
+    console.log('media:', key);
+    return <Player trailer={key} playTrailer={playTrailer} noTrailer={noTrailer} />;
   } else {
     return (
       <div className='w-[160px] sm:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2'>
@@ -65,8 +64,7 @@ const Media = ({ item }) => {
                 {(item.title !== null ? item.title : item.original_title) || (item.media_type === 'tv' && item.name !== null ? item.name : 'Title Unavailble')}
               </p>
               <div>
-                <Link className='border bg-gray-300 text-black border-gray-300 py-1 px-1 text-xs mt-5' onClick={() => watchTrailer()} to={{ pathname: '#player', trailer: key }}>Watch</ Link>
-                {playTrailer ? <button className='absolute z-10 bottom-4 ml-4 border bg-gray-300 text-black border-gray-300 py-2 px-5 hover:bg-red-600 hover:border-red-600 hover:text-gray-300' onClick={() => setPlayTrailer(false)}>Close</button> : null}
+                <a className='border bg-gray-300 text-black border-gray-300 py-1 px-1 text-xs mt-5' onClick={() => watchTrailer()}>Watch</a>
               </div>
             </div>
           </div>
