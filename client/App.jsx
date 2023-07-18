@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
+import Player from './components/Player';
 
 function App() {
 
@@ -44,6 +45,9 @@ function App() {
     }
     if (path === 'sign-up') {
       return <SignUp />;
+    }
+    if (path === 'player') {
+      return <Player />;
     }
   };
 

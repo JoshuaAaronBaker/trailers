@@ -14,6 +14,7 @@ const Home = () => {
       <Row rowId='4' title='Now Playing in Theaters' fetchURL={requests.nowPlaying} />
       <Row rowId='5' title='Animation' fetchURL={requests.animation} />
       <Row rowId='6' title='Horror' fetchURL={requests.horror} />
+      <Row rowId='7' title='Comedy' fetchURL={requests.comedy} />
     </>
   );
 };

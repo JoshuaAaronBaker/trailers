@@ -18,7 +18,7 @@ const SignUp = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    const action = window.location.pathname;
+    const action = '/sign-up';
     const req = {
       method: 'POST',
       headers: {
