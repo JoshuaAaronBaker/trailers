@@ -6,11 +6,22 @@ drop schema "public" cascade;
 
 create schema "public";
 
-create table "public"."users" (
+
+CREATE TABLE "public"."users" (
   "userId"         serial,
   "username"       text           not null,
   "hashedPassword" text           not null,
   "createdAt"      timestamptz(6) not null default now(),
-  primary key ("userId"),
-  unique ("username")
+  PRIMARY KEY ("userId"),
+  UNIQUE ("username")
+);
+
+CREATE TABLE "public"."favorites" (
+  "favoriteId"    serial,
+  "userId"        serial,
+  "favoritedItem" jsonb        NOT NULL,
+  "favoritedAt"   timestamptz(6) NOT NULL DEFAULT now(),
+  PRIMARY KEY ("favoriteId"),
+
+  FOREIGN KEY ("userId") REFERENCES "public"."users" ("userId") ON DELETE CASCADE
 );

@@ -85,7 +85,7 @@ const Main = () => {
         <div className="absolute w-full top-[20%] p-4 md:p-8">
           <h1 className="text-3xl md:text-5xl font-bold">{banner?.title}</h1>
           <div className="my-4">
-            <button className="border bg-gray-300 text-black border-gray-300 py-2 px-5 hover:bg-red-600 hover:border-red-600 hover:text-gray-300" onClick={() => banner ? handleTrailer() : null}>Watch Trailer</button>
+            <button className="border bg-gray-300 text-black border-gray-300 py-2 px-5 hover:bg-red-600 hover:border-red-600 hover:text-gray-300 ease-in duration-200" onClick={() => banner ? handleTrailer() : null}>Watch Trailer</button>
             {noTrailer
               ? (<div className='fixed inset-0 bg-black/60 flex justify-center items-center'>
                 <div className='min-w-[700px] mx-auto bg-black text-white'>

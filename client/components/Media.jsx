@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Player from './Player';
+import AppContext from '../lib/AuthContext';
+import Redirect from './Redirect';
 
-const Media = ({ item }) => {
+const Media = ({ item, rowId }) => {
+
+  const contextValue = useContext(AppContext);
 
   const [watchClicked, setWatchClicked] = useState(false);
   const [like, setLike] = useState(false);
@@ -40,24 +44,39 @@ const Media = ({ item }) => {
     }
   };
 
+  const handleLikes = () => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    console.log(token);
+    fetch('/auth/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': `${token}`
+      },
+      body: JSON.stringify(item)
+    })
+      .then(res => res.json())
+      .catch(err => console.error('Fetch failed during POST', err));
+  };
+
   return (
     <>
       {watchClicked ? <Player trailer={key} playTrailer={playTrailer} noTrailer={noTrailer} onClose={() => setWatchClicked(false)}/> : null}
-      <div className='w-[160px] sm:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2'>
-        <img className='w-full h-auto block' src={`https://image.tmdb.org/t/p/w500/${item?.backdrop_path}`} alt={item.title} />
-        <div className='absolute top-0 left-0 w-full h-full hover:bg-black/80 opacity-0 hover:opacity-100 text-white'>
-          <div className='white-space-normal text-xs md:text-sm font-bold flex justify-center items-center text-center h-full'>
+      <div className='w-[200px] sm:w-[300px] lg:w-[400px] inline-block cursor-pointer relative p-2 lg:mr-8 sm:mr-5'>
+        <img className='w-full h-auto block' src={`https://image.tmdb.org/t/p/w500/${rowId === '1' || rowId === '4' ? item?.poster_path : item?.backdrop_path}`} alt={item.title} />
+        <div className='absolute top-0 left-0 w-full h-full hover:bg-black/80 opacity-0 hover:opacity-100 ease-in duration-300 text-white'>
+          <div className='white-space-normal text-xs md:text-sm lg:text-base font-bold flex justify-center items-center text-center h-full'>
             <div className='flex-wrap'>
               <p className='mb-2'>
                 {(item.title !== null ? truncateString(item.title, 35) : truncateString(item.original_title, 35)) || (item.media_type === 'tv' && item.name !== null ? item.name : 'Title Unavailble')}
               </p>
               <div>
-                <a className='border bg-gray-300 text-black border-gray-300 py-1 px-1 text-xs' onClick={() => watchTrailer()}>Watch</a>
+                <a className='border bg-gray-300 text-black border-gray-300 py-1 px-1 text-xs lg:text-base hover:bg-red-600 hover:border-red-600 hover:text-gray-300 ease-in duration-250' onClick={() => watchTrailer()}>Watch</a>
               </div>
             </div>
           </div>
-          <p>
-            {like ? <FaHeart className='absolute top-4 left-4 color-gray-300' /> : <FaRegHeart className='absolute top-4 left-4 color-gray-300' />}
+          <p onClick={() => handleLikes()}>
+            {like ? <FaHeart className='absolute top-4 left-4 text-red-600'/> : <FaRegHeart className='absolute top-4 left-4 hover:text-red-600 ease-in duration-100' />}
           </p>
         </div>
       </div>
