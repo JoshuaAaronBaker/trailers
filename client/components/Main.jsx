@@ -9,6 +9,7 @@ const Main = () => {
   const [key, setKey] = useState(null);
   const [playTrailer, setPlayTrailer] = useState(false);
   const [noTrailer, setNoTrailer] = useState(false);
+  const [like, setLike] = useState(false);
 
   // const banner = media[Math.floor(Math.random() * media.length)];
 
@@ -44,12 +45,55 @@ const Main = () => {
   };
 
   useEffect(() => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
     axios.get(requests.popular)
       .then(response => {
         setMedia(response.data.results);
         setBanner(response.data.results[Math.floor(Math.random() * response.data.results.length)]);
       });
   }, []);
+
+  const handleLikes = () => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token) {
+      fetch('/auth/likes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': `${token}`
+        },
+        body: JSON.stringify(banner)
+      })
+        .then(res => res.json())
+        .then(result => {
+          setLike(true);
+        })
+        .catch(err => console.error('Fetch failed during POST', err));
+    } else return window.alert('You need to be signed in to save a movie!');
+  };
+
+  const handleFavoritesList = () => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token) {
+      fetch('/auth/get-likes', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': `${token}`
+        }
+      })
+        .then(res => res.json())
+        .then(result => {
+          console.log(result);
+
+          for (const obj of result) {
+            if (obj.favoritedItem.id === banner.id) {
+              setLike(true);
+            }
+          }
+        });
+    }
+  };
 
   return (
     <div className="w-full h-[700px] md:h-[800px] xl:h-[1000px] text-white">
@@ -81,7 +125,7 @@ const Main = () => {
           />
           : null}
         {playTrailer ? <button className='absolute z-10 bottom-4 ml-4 border bg-gray-300 text-black border-gray-300 py-2 px-5 hover:bg-red-600 hover:border-red-600 hover:text-gray-300' onClick={() => closeTrailer()}>Close</button> : null}
-        <img className="w-full h-full object-cover" src={`https://image.tmdb.org/t/p/original${banner?.backdrop_path}`} alt={media?.title} />
+        <img className="w-full h-full object-cover" src={`https://image.tmdb.org/t/p/original${banner?.backdrop_path}`} alt={media?.title} onLoad={() => handleFavoritesList()}/>
         <div className="absolute w-full top-[20%] p-4 md:p-8">
           <h1 className="text-3xl md:text-5xl font-bold">{banner?.title}</h1>
           <div className="my-4">
@@ -97,7 +141,7 @@ const Main = () => {
                 </div>
               </div>)
               : null}
-            <button className="border text-gray-300 py-2 px-5 ml-4">Add to List</button>
+            {like ? <button className="border text-gray-300 bg-green-600 py-2 px-5 ml-4">Liked</button> : <button className="border text-gray-300 py-2 px-5 ml-4" onClick={() => handleLikes()}>Add to List</button>}
           </div>
           <p className="text-gray-400 text-sm">Released:{banner?.release_date}</p>
           <p className="w-full md:max-w-[70%] lg:max-w-[50%] xl:max-w-[35%] text-gray-200">{banner?.overview}</p>

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Player from './Player';
 import AppContext from '../lib/AuthContext';
-import Redirect from './Redirect';
 
 const Media = ({ item, rowId }) => {
 
@@ -46,24 +45,50 @@ const Media = ({ item, rowId }) => {
 
   const handleLikes = () => {
     const token = window.localStorage.getItem('trailerflix-jwt');
-    console.log(token);
-    fetch('/auth/likes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Token': `${token}`
-      },
-      body: JSON.stringify(item)
-    })
-      .then(res => res.json())
-      .catch(err => console.error('Fetch failed during POST', err));
+    if (token) {
+      fetch('/auth/likes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': `${token}`
+        },
+        body: JSON.stringify(item)
+      })
+        .then(res => res.json())
+        .then(result => {
+          setLike(true);
+        })
+        .catch(err => console.error('Fetch failed during POST', err));
+    } else return window.alert('You need to be signed in to save a movie!');
+  };
+
+  const handleFavoritesList = () => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token) {
+      fetch('/auth/get-likes', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': `${token}`
+        }
+      })
+        .then(res => res.json())
+        .then(result => {
+
+          for (const obj of result) {
+            if (obj.favoritedItem.id === item.id) {
+              setLike(true);
+            }
+          }
+        });
+    }
   };
 
   return (
     <>
       {watchClicked ? <Player trailer={key} playTrailer={playTrailer} noTrailer={noTrailer} onClose={() => setWatchClicked(false)}/> : null}
       <div className='w-[200px] sm:w-[300px] lg:w-[400px] inline-block cursor-pointer relative p-2 lg:mr-8 sm:mr-5'>
-        <img className='w-full h-auto block' src={`https://image.tmdb.org/t/p/w500/${rowId === '1' || rowId === '4' ? item?.poster_path : item?.backdrop_path}`} alt={item.title} />
+        <img className='w-full h-auto block' src={`https://image.tmdb.org/t/p/w500/${rowId === '1' || rowId === '4' ? item?.poster_path : item?.backdrop_path}`} alt={item.title} onLoad={() => handleFavoritesList()} />
         <div className='absolute top-0 left-0 w-full h-full hover:bg-black/80 opacity-0 hover:opacity-100 ease-in duration-300 text-white'>
           <div className='white-space-normal text-xs md:text-sm lg:text-base font-bold flex justify-center items-center text-center h-full'>
             <div className='flex-wrap'>
