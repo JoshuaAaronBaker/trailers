@@ -12,6 +12,7 @@ function App() {
 
   const [user, setUser] = useState(null);
   const [route, setRoute] = useState(parseRoute(window.location.hash));
+  let [list, setList] = useState(0);
 
   useEffect(() => {
     window.addEventListener('hashchange', () => {
@@ -34,11 +35,17 @@ function App() {
     setUser({ user: null });
   };
 
+  const updateUserList = () => {
+    setList(list++);
+  };
+
+  console.log(user);
+
   const renderPage = () => {
     const { path } = route;
 
     if (path === '') {
-      return <Home />;
+      return <Home auth={user}/>;
     }
     if (path === 'sign-in') {
       return <LogIn />;
@@ -51,7 +58,7 @@ function App() {
     }
   };
 
-  const contextValue = { user, route, handleSignIn, handleSignOut };
+  const contextValue = { user, route, handleSignIn, handleSignOut, updateUserList };
   return (
     <AppContext.Provider value={contextValue}>
       <>

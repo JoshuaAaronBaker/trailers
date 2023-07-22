@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Player from './Player';
@@ -45,7 +45,7 @@ const Media = ({ item, rowId }) => {
 
   const handleLikes = () => {
     const token = window.localStorage.getItem('trailerflix-jwt');
-    if (token) {
+    if (token && contextValue.user) {
       fetch('/auth/likes', {
         method: 'POST',
         headers: {
@@ -64,7 +64,7 @@ const Media = ({ item, rowId }) => {
 
   const handleFavoritesList = () => {
     const token = window.localStorage.getItem('trailerflix-jwt');
-    if (token) {
+    if (token && contextValue.user?.user) {
       fetch('/auth/get-likes', {
         method: 'GET',
         headers: {
@@ -81,14 +81,14 @@ const Media = ({ item, rowId }) => {
             }
           }
         });
-    }
+    } else setLike(false);
   };
 
   return (
     <>
       {watchClicked ? <Player trailer={key} playTrailer={playTrailer} noTrailer={noTrailer} onClose={() => setWatchClicked(false)}/> : null}
-      <div className='w-[200px] sm:w-[300px] lg:w-[400px] inline-block cursor-pointer relative p-2 lg:mr-8 sm:mr-5'>
-        <img className='w-full h-auto block' src={`https://image.tmdb.org/t/p/w500/${rowId === '1' || rowId === '4' ? item?.poster_path : item?.backdrop_path}`} alt={item.title} onLoad={() => handleFavoritesList()} />
+      <div className='w-[200px] sm:w-[300px] lg:w-[400px] inline-block cursor-pointer relative transition duration-200 ease-out p-2 lg:mr-1 sm:mr-2 md:hover:scale-105'>
+        <img className='w-full h-auto block rounded-sm object-cover md:rounded' src={`https://image.tmdb.org/t/p/w500/${rowId === '1' || rowId === '4' ? item?.poster_path : item?.backdrop_path}`} alt={item.title} onLoad={() => handleFavoritesList()} />
         <div className='absolute top-0 left-0 w-full h-full hover:bg-black/80 opacity-0 hover:opacity-100 ease-in duration-300 text-white'>
           <div className='white-space-normal text-xs md:text-sm lg:text-base font-bold flex justify-center items-center text-center h-full'>
             <div className='flex-wrap'>

@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import requests from '../requests';
 import axios from 'axios';
 import Youtube from 'react-youtube';
+import AppContext from '../lib/AuthContext';
 
-const Main = () => {
+const Main = ({ auth }) => {
   const [media, setMedia] = useState([]);
   const [banner, setBanner] = useState();
   const [key, setKey] = useState(null);
   const [playTrailer, setPlayTrailer] = useState(false);
   const [noTrailer, setNoTrailer] = useState(false);
   const [like, setLike] = useState(false);
+
+  const contextValue = useContext(AppContext);
+
+  console.log(auth);
 
   // const banner = media[Math.floor(Math.random() * media.length)];
 
@@ -45,11 +50,11 @@ const Main = () => {
   };
 
   useEffect(() => {
-    const token = window.localStorage.getItem('trailerflix-jwt');
     axios.get(requests.popular)
       .then(response => {
         setMedia(response.data.results);
         setBanner(response.data.results[Math.floor(Math.random() * response.data.results.length)]);
+        setLike(false);
       });
   }, []);
 
@@ -74,7 +79,7 @@ const Main = () => {
 
   const handleFavoritesList = () => {
     const token = window.localStorage.getItem('trailerflix-jwt');
-    if (token) {
+    if (token && contextValue.user?.user) {
       fetch('/auth/get-likes', {
         method: 'GET',
         headers: {
@@ -84,21 +89,20 @@ const Main = () => {
       })
         .then(res => res.json())
         .then(result => {
-          console.log(result);
 
           for (const obj of result) {
-            if (obj.favoritedItem.id === banner.id) {
+            if (obj.favoritedItem.id === banner?.id) {
               setLike(true);
             }
           }
         });
-    }
+    } else setLike(false);
   };
 
   return (
     <div className="w-full h-[700px] md:h-[800px] xl:h-[1000px] text-white">
       <div className="w-full h-full">
-        <div className="absolute w-full h-[700px]  md:h-[800px] xl:h-[1000px] bg-gradient-to-r from-black" />
+        <div className="absolute w-full h-[700px]  md:h-[800px] xl:h-[1000px] bg-gradient-to-t from-black" />
         {playTrailer
           ? <Youtube
               videoId={key.key ? key.key : null}
@@ -135,7 +139,7 @@ const Main = () => {
                 <div className='min-w-[700px] mx-auto bg-black text-white'>
                   <div className='max-w-[320px] mx-auto py-16'>
                     <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <h1 className='text-lg'>Sorry, there are no trailers available for {banner.title}.</h1>
+                    <h1 className='text-lg'>Sorry, there are no trailers available for {banner?.title}.</h1>
                     <button className='bg-red-600 px-6 py-2 mt-6 rounded cursor-pointer' onClick={() => handleNotFound()}>Ok</button>
                   </div>
                 </div>
@@ -147,7 +151,6 @@ const Main = () => {
           <p className="w-full md:max-w-[70%] lg:max-w-[50%] xl:max-w-[35%] text-gray-200">{banner?.overview}</p>
         </div>
       </div>
-
     </div>
   );
 };

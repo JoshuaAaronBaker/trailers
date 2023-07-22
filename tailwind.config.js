@@ -3,7 +3,7 @@ module.exports = {
   content: ['./server/**/.html',
     './client/**/*.{js,jsx}'],
   theme: {
-    extend: {},
+    extend: {}
   },
-  plugins: [require('tailwind-scrollbar-hide')],
-}
+  plugins: [require('tailwind-scrollbar-hide')]
+};

@@ -5,6 +5,24 @@ const Navbar = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     setShowModal(false);
   }, []);
@@ -17,8 +35,8 @@ const Navbar = () => {
 
   if (window.localStorage.getItem('trailerflix-jwt')) {
     return (
-      <div className='flex items-center justify-between p-4 z-[100] w-full absolute'>
-        <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
+      <div className={`flex items-center justify-between p-4 z-[100] w-full fixed top-0 ${isScrolled && 'bg-black ease-in-out duration-500'}`}>
+        <a className='text-red-600 text-3xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
         <div>
           <button className='text-white bg-red-600 px-6 py-2 rounded cursor-pointer'
           onClick={() => handleModal()}
@@ -29,7 +47,7 @@ const Navbar = () => {
                 <div className='max-w-[320px] mx-auto py-16'>
                   <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   <h1 className='text-lg'>Are you sure you want to log out?</h1>
-                  <button className='bg-red-600 px-6 py-2 mr-4 mt-6 rounded cursor-pointer' onClick={() => { value.handleSignOut(); setShowModal(false); }}>Yes</button>
+                  <button className='bg-red-600 px-6 py-2 mr-4 mt-6 rounded cursor-pointer' onClick={() => { value.handleSignOut(); setShowModal(false); value.updateUserList(); }}>Yes</button>
                   <button className='bg-red-600 px-6 py-2 ml-4 mt-6 rounded cursor-pointer' onClick={() => setShowModal(false)}>No</button>
                 </div>
               </div>
@@ -42,7 +60,7 @@ const Navbar = () => {
     );
   }
   return (
-    <div className='flex items-center justify-between p-4 z-[100] w-full absolute'>
+    <div className={`flex items-center justify-between p-4 z-[100] w-full fixed top-0 ${isScrolled && 'bg-black ease-in-out duration-500'}`}>
       <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
       <div>
         <a className='text-white pr-4 cursor-pointer' href='#sign-in'>Sign In</a>
