@@ -1,30 +1,28 @@
 import axios from 'axios';
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Media from './Media';
-import AppContext from '../lib/AuthContext';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
-const Row = ({ title, fetchURL, rowId, videos }) => {
+const Row = ({ title, fetchURL, rowId, videos, likedItems, handleNewLikes }) => {
 
   const [media, setMedia] = useState([]);
-
-  const contextValue = useContext(AppContext);
-  const token = window.localStorage.getItem('trailerflix-jwt');
 
   useEffect(() => {
     const token = window.localStorage.getItem('trailerflix-jwt');
     if (token && fetchURL === '/auth/get-likes') {
-      fetch(fetchURL, {
-        method: 'GET',
+      axios.get(fetchURL, {
         headers: {
           'Content-Type': 'application/json',
           'X-Access-Token': `${token}`
         }
       })
-        .then(res => res.json())
-        .then(response => {
-          const flattenedArray = response.map(item => item.favoritedItem);
-          setMedia(flattenedArray);
+        .then(res => {
+          const flattenedArray = res.data.map(item => item.favoritedItem);
+          const newestLikesFirst = flattenedArray.reverse();
+          setMedia(newestLikesFirst);
+        })
+        .catch(error => {
+          console.error('Axios GET request failed:', error);
         });
     } else if (fetchURL !== '/auth/get-likes') {
       axios.get(fetchURL)
@@ -32,10 +30,10 @@ const Row = ({ title, fetchURL, rowId, videos }) => {
           setMedia(response.data.results);
         })
         .catch(error => {
-          console.error(error);
+          console.error('Axios GET request failed:', error);
         });
     }
-  }, [fetchURL]);
+  }, [fetchURL, likedItems]);
 
   const validMedia = [];
 
@@ -67,7 +65,7 @@ const Row = ({ title, fetchURL, rowId, videos }) => {
   return (
 
     <>
-      <h2 className='text-white font-bold md:text-2xl p-4 mt-8 mb-3 ml-4'>{title}</h2>
+      <h2 className='text-white font-bold md:text-2xl p-4 mt-8 mb-3 ml-4'>{media.length === 0 ? null : title}</h2>
       <div className='relative flex items-center group mb-10 ml-4'>
 
         <MdChevronLeft className={`text-white bg-transparent left-0 absolute hover:opacity-100 cursor-pointer z-10 hidden invisible lg:visible md:visible group-hover:block ${!isMoved && ' lg:invisible md:invisible'}`} size={60}
@@ -75,7 +73,7 @@ const Row = ({ title, fetchURL, rowId, videos }) => {
         />
         <div id={'slider' + rowId} className='w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth relative scrollbar-hide overflow-y-hidden' ref={rowRef}>
           {validMedia.map((item, id) => {
-            return <Media key={id} item={item} rowId={rowId}/>;
+            return <Media key={id} item={item} rowId={rowId} handleNewLikes={handleNewLikes} likedItems={likedItems}/>;
           })}
         </div>
         <MdChevronRight className='text-white bg-transparent right-0 absolute hover:opacity-100 cursor-pointer z-10 hidden invisible lg:visible md:visible group-hover:block' size={60}

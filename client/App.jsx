@@ -12,7 +12,7 @@ function App() {
 
   const [user, setUser] = useState(null);
   const [route, setRoute] = useState(parseRoute(window.location.hash));
-  let [list, setList] = useState(0);
+  const [list, setList] = useState(true);
 
   useEffect(() => {
     window.addEventListener('hashchange', () => {
@@ -28,6 +28,7 @@ function App() {
     const { user, token } = result;
     window.localStorage.setItem('trailerflix-jwt', token);
     setUser({ user });
+    setList(false);
   };
 
   const handleSignOut = () => {
@@ -35,17 +36,11 @@ function App() {
     setUser({ user: null });
   };
 
-  const updateUserList = () => {
-    setList(list++);
-  };
-
-  console.log(user);
-
   const renderPage = () => {
     const { path } = route;
 
     if (path === '') {
-      return <Home auth={user}/>;
+      return <Home />;
     }
     if (path === 'sign-in') {
       return <LogIn />;
@@ -58,7 +53,7 @@ function App() {
     }
   };
 
-  const contextValue = { user, route, handleSignIn, handleSignOut, updateUserList };
+  const contextValue = { user, route, handleSignIn, handleSignOut, list };
   return (
     <AppContext.Provider value={contextValue}>
       <>
