@@ -75,11 +75,45 @@ app.post('/auth/sign-in', (req, res, next) => {
         });
     })
     .catch(err => next(err));
+}
+);
+
+app.use(authorizationMiddleware);
+
+app.post('/auth/likes', (req, res, next) => {
+  const { userId } = req.user;
+  const favoritedItem = req.body;
+
+  const sql = `
+  INSERT INTO "favorites" ("userId", "favoritedItem")
+  VALUES ($1, $2)
+  RETURNING "userId", "favoriteId", "favoritedItem";`;
+  const params = [userId, favoritedItem];
+  db.query(sql, params)
+    .then(result => {
+      const like = result.rows;
+      res.status(201).json(like);
+    }).catch(err => next(err));
+});
+
+app.get('/auth/get-likes', (req, res, next) => {
+  const { userId } = req.user;
+
+  const sql = `
+  SELECT "favoritedItem"
+  FROM "public"."favorites"
+  WHERE "userId" = $1;
+  `;
+
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      const favoritesList = result.rows;
+      res.status(201).json(favoritesList);
+    }).catch(err => next(err));
 });
 
 app.use(errorMiddleware);
-
-app.use(authorizationMiddleware);
 
 app.use(ClientError);
 

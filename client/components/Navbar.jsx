@@ -5,6 +5,24 @@ const Navbar = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     setShowModal(false);
   }, []);
@@ -17,8 +35,8 @@ const Navbar = () => {
 
   if (window.localStorage.getItem('trailerflix-jwt')) {
     return (
-      <div className='flex items-center justify-between p-4 z-[100] w-full absolute'>
-        <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
+      <div className={`flex items-center justify-between p-4 z-[100] w-full fixed top-0 ${isScrolled && 'bg-black ease-in-out duration-500'}`}>
+        <a className='text-red-600 text-3xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
         <div>
           <button className='text-white bg-red-600 px-6 py-2 rounded cursor-pointer'
           onClick={() => handleModal()}
@@ -42,7 +60,7 @@ const Navbar = () => {
     );
   }
   return (
-    <div className='flex items-center justify-between p-4 z-[100] w-full absolute'>
+    <div className={`flex items-center justify-between p-4 z-[100] w-full fixed top-0 ${isScrolled && 'bg-black ease-in-out duration-500'}`}>
       <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
       <div>
         <a className='text-white pr-4 cursor-pointer' href='#sign-in'>Sign In</a>

@@ -12,6 +12,7 @@ function App() {
 
   const [user, setUser] = useState(null);
   const [route, setRoute] = useState(parseRoute(window.location.hash));
+  const [list, setList] = useState(true);
 
   useEffect(() => {
     window.addEventListener('hashchange', () => {
@@ -27,6 +28,7 @@ function App() {
     const { user, token } = result;
     window.localStorage.setItem('trailerflix-jwt', token);
     setUser({ user });
+    setList(false);
   };
 
   const handleSignOut = () => {
@@ -51,7 +53,7 @@ function App() {
     }
   };
 
-  const contextValue = { user, route, handleSignIn, handleSignOut };
+  const contextValue = { user, route, handleSignIn, handleSignOut, list };
   return (
     <AppContext.Provider value={contextValue}>
       <>
