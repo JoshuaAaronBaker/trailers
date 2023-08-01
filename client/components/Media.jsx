@@ -72,6 +72,8 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
         .then(response => {
           const result = response.data;
           const isItemLiked = result.some(obj => obj.favoritedItem.id === item.id);
+          console.log(isItemLiked);
+          console.log(response.data);
           setIsLiked(isItemLiked);
         })
         .catch(error => {
@@ -87,6 +89,27 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
       return str.slice(0, num) + '...';
     } else {
       return str;
+    }
+  };
+
+  const handleUnlike = () => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token && contextValue?.user?.user) {
+      axios.delete('/auth/unlike', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        },
+        data: { id: item.id } // Correctly pass the item ID as the request body
+      })
+        .then(response => {
+          setIsLiked(false);
+          handleNewLikes([]);
+          console.log(response);
+        })
+        .catch(error => {
+          console.error('Fetch failed during DELETE', error);
+        });
     }
   };
 
@@ -119,13 +142,13 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
               </div>
             </div>
           </div>
-          <p onClick={() => handleLikes()}>
+          <p>
             {isLiked && contextValue.user?.user
               ? (
-                <FaHeart className="absolute top-4 left-4 text-red-600" />
+                <FaHeart className="absolute top-4 left-4 text-red-600" onClick={() => handleUnlike()}/>
                 )
               : (
-                <FaRegHeart className="absolute top-4 left-4 hover:text-red-600 ease-in duration-100" />
+                <FaRegHeart className="absolute top-4 left-4 hover:text-red-600 ease-in duration-100" onClick={() => handleLikes()}/>
                 )}
           </p>
         </div>

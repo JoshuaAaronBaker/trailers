@@ -23,7 +23,7 @@ const Home = () => {
         likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='1' title='Top 10 Movies in the U.S. Today' fetchURL={requests.popular} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='2' title='Coming Soon' fetchURL={requests.upcoming} likedItems={likedItems} handleNewLikes={handleNewLikes} />
-        <Row rowId='3' title='Trending Now' fetchURL={requests.trending} />
+        <Row rowId='3' title='Trending Now' fetchURL={requests.trending} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='4' title='Now Playing in Theaters' fetchURL={requests.nowPlaying} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='5' title='Animation' fetchURL={requests.animation} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='6' title='Horror' fetchURL={requests.horror} likedItems={likedItems} handleNewLikes={handleNewLikes} />
