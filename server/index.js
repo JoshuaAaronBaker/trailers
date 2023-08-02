@@ -117,7 +117,6 @@ app.get('/auth/get-likes', (req, res, next) => {
 app.delete('/auth/unlike', (req, res, next) => {
   const { userId } = req.user;
   const movieId = req.body.id; // Assuming you're sending the item ID as req.body.data.id
-  console.log(req.body.id);
 
   const sql = `
     DELETE FROM "favorites"

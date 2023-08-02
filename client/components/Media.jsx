@@ -14,8 +14,24 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
   const [noTrailer, setNoTrailer] = useState(false);
 
   useEffect(() => {
-    handleFavoritesList();
-  }, []);
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token && contextValue.user?.user) {
+      axios.get('/auth/get-likes', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      })
+        .then(response => {
+          const result = response.data;
+          const isItemLiked = result.some(obj => obj.favoritedItem.id === item.id);
+          setIsLiked(isItemLiked);
+        })
+        .catch(error => {
+          console.error('Fetch failed during GET', error);
+        });
+    }
+  });
 
   const handleTrailerClick = () => {
     axios
@@ -60,30 +76,6 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
     }
   };
 
-  const handleFavoritesList = () => {
-    const token = window.localStorage.getItem('trailerflix-jwt');
-    if (token && contextValue.user?.user) {
-      axios.get('/auth/get-likes', {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Access-Token': token
-        }
-      })
-        .then(response => {
-          const result = response.data;
-          const isItemLiked = result.some(obj => obj.favoritedItem.id === item.id);
-          console.log(isItemLiked);
-          console.log(response.data);
-          setIsLiked(isItemLiked);
-        })
-        .catch(error => {
-          console.error('Fetch failed during GET', error);
-        });
-    } else {
-      setIsLiked(false);
-    }
-  };
-
   const truncateString = (str, num) => {
     if (str?.length > num) {
       return str.slice(0, num) + '...';
@@ -105,7 +97,6 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
         .then(response => {
           setIsLiked(false);
           handleNewLikes([]);
-          console.log(response);
         })
         .catch(error => {
           console.error('Fetch failed during DELETE', error);
