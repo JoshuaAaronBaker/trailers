@@ -83,12 +83,13 @@ app.use(authorizationMiddleware);
 app.post('/auth/likes', (req, res, next) => {
   const { userId } = req.user;
   const favoritedItem = req.body;
+  const movieId = req.body.id;
 
   const sql = `
-  INSERT INTO "favorites" ("userId", "favoritedItem")
-  VALUES ($1, $2)
-  RETURNING "userId", "favoriteId", "favoritedItem";`;
-  const params = [userId, favoritedItem];
+  INSERT INTO "favorites" ("userId", "favoritedItem", "movieId")
+  VALUES ($1, $2, $3)
+  RETURNING "userId", "favoriteId", "favoritedItem", "movieId";`;
+  const params = [userId, favoritedItem, movieId];
   db.query(sql, params)
     .then(result => {
       const like = result.rows;
@@ -111,6 +112,30 @@ app.get('/auth/get-likes', (req, res, next) => {
       const favoritesList = result.rows;
       res.status(201).json(favoritesList);
     }).catch(err => next(err));
+});
+
+app.delete('/auth/unlike', (req, res, next) => {
+  const { userId } = req.user;
+  const movieId = req.body.id; // Assuming you're sending the item ID as req.body.data.id
+
+  const sql = `
+    DELETE FROM "favorites"
+    WHERE "movieId" = $1
+    AND "userId" = $2;
+  `;
+
+  const params = [movieId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      // Check if any rows were deleted
+      if (result.rowCount > 0) {
+        res.sendStatus(204); // Successfully deleted, no content to send back
+      } else {
+        res.sendStatus(404); // Not found or already deleted
+      }
+    })
+    .catch(err => next(err));
 });
 
 app.use(errorMiddleware);

@@ -4,7 +4,7 @@ import axios from 'axios';
 import Youtube from 'react-youtube';
 import AppContext from '../lib/AuthContext';
 
-const Main = ({ handleNewLikes }) => {
+const Main = ({ handleNewLikes, likedItems }) => {
   const [media, setMedia] = useState([]);
   const [banner, setBanner] = useState();
   const [key, setKey] = useState(null);
@@ -58,41 +58,62 @@ const Main = ({ handleNewLikes }) => {
     if (contextValue.user?.user) {
       const token = window.localStorage.getItem('trailerflix-jwt');
       if (token) {
-        fetch('/auth/get-likes', {
-          method: 'GET',
+        axios.get('/auth/get-likes', {
           headers: {
             'Content-Type': 'application/json',
-            'X-Access-Token': `${token}`
+            'X-Access-Token': token
           }
         })
-          .then(res => res.json())
-          .then(result => {
-            setUserLikes(result.map(item => item.favoritedItem.id));
+          .then(response => {
+            setUserLikes(response.data.map(item => item.favoritedItem.id));
           })
-          .catch(err => console.error('Fetch failed during GET', err));
+          .catch(error => {
+            console.error('Fetch failed during GET', error);
+          });
       }
     }
-  }, [contextValue.user?.user]);
+  }, [contextValue.user?.user, likedItems]);
 
   const handleLikes = () => {
     const token = window.localStorage.getItem('trailerflix-jwt');
     if (token) {
-      fetch('/auth/likes', {
-        method: 'POST',
+      axios.post('/auth/likes', banner, {
         headers: {
           'Content-Type': 'application/json',
-          'X-Access-Token': `${token}`
-        },
-        body: JSON.stringify(banner)
+          'X-Access-Token': token
+        }
       })
-        .then(res => res.json())
-        .then(result => {
+        .then(response => {
           handleNewLikes(banner);
           const updatedUserLikes = [...userLikes, banner.id];
           setUserLikes(updatedUserLikes);
         })
-        .catch(err => console.error('Fetch failed during POST', err));
-    } else return window.alert('You need to be signed in to save a movie!');
+        .catch(error => {
+          console.error('Fetch failed during POST', error);
+        });
+    } else {
+      window.alert('You need to be signed in to save a movie!');
+    }
+  };
+
+  const handleUnlike = () => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token && contextValue?.user?.user) {
+      axios.delete('/auth/unlike', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        },
+        data: { id: banner.id }
+      })
+        .then(response => {
+          setUserLikes([]);
+          handleNewLikes([]);
+        })
+        .catch(error => {
+          console.error('Fetch failed during DELETE', error);
+        });
+    }
   };
 
   return (
@@ -140,7 +161,7 @@ const Main = ({ handleNewLikes }) => {
               : null}
             {contextValue?.user?.user && banner && userLikes.includes(banner.id)
               ? (
-                <button className="border text-gray-300 bg-green-600 py-2 px-5 ml-4">Liked</button>
+                <button className="border text-gray-300 bg-green-600 py-2 px-5 ml-4" onClick={() => handleUnlike()}>Liked</button>
                 )
               : (
                 <button className="border text-gray-300 py-2 px-5 ml-4" onClick={() => handleLikes()}>Add to List</button>

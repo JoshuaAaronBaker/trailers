@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import AppContext from '../lib/AuthContext';
 import Redirect from './Redirect';
+import axios from 'axios';
 
 const LogIn = () => {
   const value = useContext(AppContext);
@@ -21,22 +22,21 @@ const LogIn = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    const req = {
-      method: 'POST',
+    axios.post('/auth/sign-in', credentials, {
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(credentials)
-    };
-    fetch('/auth/sign-in', req)
-      .then(res => res.json())
-      .then(result => {
+      }
+    })
+      .then(response => {
+        const result = response.data;
         if (result.user && result.token) {
           value.handleSignIn(result);
           window.location.hash = '';
         }
       })
-      .catch(err => console.error(err));
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   if (value.user && window.localStorage.getItem('trailerflix-jwt')) {

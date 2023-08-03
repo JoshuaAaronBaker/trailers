@@ -18,12 +18,12 @@ const Home = () => {
   if (token && contextValue.user?.user) {
     return (
       <>
-        <Main handleNewLikes={handleNewLikes} />
+        <Main handleNewLikes={handleNewLikes} likedItems={likedItems}/>
         <Row rowId='0' title={`${(token && contextValue.user?.user) ? contextValue?.user?.user.username : null}'s List`} fetchURL='/auth/get-likes'
         likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='1' title='Top 10 Movies in the U.S. Today' fetchURL={requests.popular} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='2' title='Coming Soon' fetchURL={requests.upcoming} likedItems={likedItems} handleNewLikes={handleNewLikes} />
-        <Row rowId='3' title='Trending Now' fetchURL={requests.trending} />
+        <Row rowId='3' title='Trending Now' fetchURL={requests.trending} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='4' title='Now Playing in Theaters' fetchURL={requests.nowPlaying} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='5' title='Animation' fetchURL={requests.animation} likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='6' title='Horror' fetchURL={requests.horror} likedItems={likedItems} handleNewLikes={handleNewLikes} />

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -14,8 +15,24 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
   const [noTrailer, setNoTrailer] = useState(false);
 
   useEffect(() => {
-    handleFavoritesList();
-  }, []);
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token && contextValue.user?.user) {
+      axios.get('/auth/get-likes', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      })
+        .then(response => {
+          const result = response.data;
+          const isItemLiked = result.some(obj => obj.favoritedItem.id === item.id);
+          setIsLiked(isItemLiked);
+        })
+        .catch(error => {
+          console.error('Fetch failed during GET', error);
+        });
+    }
+  });
 
   const handleTrailerClick = () => {
     axios
@@ -60,33 +77,31 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
     }
   };
 
-  const handleFavoritesList = () => {
-    const token = window.localStorage.getItem('trailerflix-jwt');
-    if (token && contextValue.user?.user) {
-      axios.get('/auth/get-likes', {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Access-Token': token
-        }
-      })
-        .then(response => {
-          const result = response.data;
-          const isItemLiked = result.some(obj => obj.favoritedItem.id === item.id);
-          setIsLiked(isItemLiked);
-        })
-        .catch(error => {
-          console.error('Fetch failed during GET', error);
-        });
-    } else {
-      setIsLiked(false);
-    }
-  };
-
   const truncateString = (str, num) => {
     if (str?.length > num) {
       return str.slice(0, num) + '...';
     } else {
       return str;
+    }
+  };
+
+  const handleUnlike = () => {
+    const token = window.localStorage.getItem('trailerflix-jwt');
+    if (token && contextValue?.user?.user) {
+      axios.delete('/auth/unlike', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        },
+        data: { id: item.id }
+      })
+        .then(response => {
+          setIsLiked(false);
+          handleNewLikes([]);
+        })
+        .catch(error => {
+          console.error('Fetch failed during DELETE', error);
+        });
     }
   };
 
@@ -119,13 +134,13 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
               </div>
             </div>
           </div>
-          <p onClick={() => handleLikes()}>
+          <p>
             {isLiked && contextValue.user?.user
               ? (
-                <FaHeart className="absolute top-4 left-4 text-red-600" />
+                <FaHeart className="absolute top-4 left-4 text-red-600" onClick={() => handleUnlike()}/>
                 )
               : (
-                <FaRegHeart className="absolute top-4 left-4 hover:text-red-600 ease-in duration-100" />
+                <FaRegHeart className="absolute top-4 left-4 hover:text-red-600 ease-in duration-100" onClick={() => handleLikes()}/>
                 )}
           </p>
         </div>

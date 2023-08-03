@@ -20,6 +20,7 @@ CREATE TABLE "public"."favorites" (
   "favoriteId"    serial,
   "userId"        serial,
   "favoritedItem" jsonb        NOT NULL,
+  "movieId"       jsonb        NOT NULL,
   "favoritedAt"   timestamptz(6) NOT NULL DEFAULT now(),
   PRIMARY KEY ("favoriteId"),
 
