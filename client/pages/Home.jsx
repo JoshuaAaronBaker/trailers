@@ -18,7 +18,7 @@ const Home = () => {
   if (token && contextValue.user?.user) {
     return (
       <>
-        <Main handleNewLikes={handleNewLikes} />
+        <Main handleNewLikes={handleNewLikes} likedItems={likedItems}/>
         <Row rowId='0' title={`${(token && contextValue.user?.user) ? contextValue?.user?.user.username : null}'s List`} fetchURL='/auth/get-likes'
         likedItems={likedItems} handleNewLikes={handleNewLikes} />
         <Row rowId='1' title='Top 10 Movies in the U.S. Today' fetchURL={requests.popular} likedItems={likedItems} handleNewLikes={handleNewLikes} />

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -92,7 +93,7 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
           'Content-Type': 'application/json',
           'X-Access-Token': token
         },
-        data: { id: item.id } // Correctly pass the item ID as the request body
+        data: { id: item.id }
       })
         .then(response => {
           setIsLiked(false);
