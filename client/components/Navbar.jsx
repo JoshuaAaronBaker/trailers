@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
+import SearchResults from './SearchResults';
 import AppContext from '../lib/AuthContext';
 
 const Navbar = () => {
@@ -6,6 +8,10 @@ const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const [menu, setMenu] = useState(false);
+
+  const [searchKey, setSearchKey] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +35,17 @@ const Navbar = () => {
 
   const handleModal = () => {
     setShowModal(true);
+  };
+
+  const handleMenu = () => {
+    setMenu(!menu);
+  };
+
+  const [showResults, setShowResults] = useState(false);
+
+  const handleSearch = event => {
+    event.preventDefault();
+    setShowResults(true);
   };
 
   const value = useContext(AppContext);
@@ -62,11 +79,36 @@ const Navbar = () => {
   return (
     <div className={`flex items-center justify-between p-4 z-[100] w-full fixed top-0 ${isScrolled && 'bg-black ease-in-out duration-500'}`}>
       <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
-      <div>
+      <div onClick={() => handleMenu()} className='text-white z-[100] block md:hidden'>
+        {!menu ? <AiOutlineMenu size={40} /> : <AiOutlineClose size={40} />}
+      </div>
+      <div className='hidden md:flex items-center gap-5'>
+        <form action="" className='relative mx-auto w-max' onSubmit={event => handleSearch(event)}>
+          <input type="search" onChange={e => setSearchKey(e.target.value)} className='text-white cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outine-non focus:w-full focus:cursor-text focus:border-white focuse:pl-16 focus:pr-4' />
+          <AiOutlineSearch size={40} className="text-white absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5" />
+        </form>
+        {showResults && (
+          <SearchResults
+            key={searchKey}
+            query={`https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIEDB_API_KEY}&language=en-US&query=${searchKey}&page=1&include_adult=false`}
+          />
+        )}
         <a className='text-white pr-4 cursor-pointer' href='#sign-in'>Sign In</a>
         <a className='bg-red-600 px-6 py-2 rounded cursor-pointer' href='#sign-up'>Sign Up</a>
       </div>
+      <div className={menu ? 'fixed left-0 top-0 w-[70%] h-full border-r-gray-900 bg-black ease-in-out duration-500' : 'ease-in-out duration-500 fixed left-[-100%]'}>
+        <div className='flex items-center p-4'>
+          <a className='text-red-600 text-4xl font-bold cursor-pointer' onClick={() => handleMenu()} href='#'>TRAILERFLIX</a>
+        </div>
+        <div className='p-4'>
+          <a className='text-white px-4 py-2 cursor-pointer border-white' onClick={() => handleMenu()} href='#sign-in'>Sign In</a>
+        </div>
+        <div className='p-4'>
+          <a className='bg-red-600 px-4 py-2 rounded cursor-pointer' onClick={() => handleMenu()} href='#sign-up'>Sign Up</a>
+        </div>
+      </div>
     </div>
+
   );
 };
 
