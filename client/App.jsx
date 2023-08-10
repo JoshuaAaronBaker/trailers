@@ -36,11 +36,24 @@ function App() {
     setUser({ user: null });
   };
 
+  const [searchKey, setSearchKey] = useState('');
+
+  const handleSearch = event => {
+    event.preventDefault();
+
+  };
+
+  const [likedItems, setLikedItems] = useState([]);
+
+  const handleNewLikes = item => {
+    setLikedItems(prevLikedItems => [...prevLikedItems, item]);
+  };
+
   const renderPage = () => {
     const { path } = route;
 
     if (path === '') {
-      return <Home />;
+      return <Home handleNewLikes={handleNewLikes} likedItems={likedItems}/>;
     }
     if (path === 'sign-in') {
       return <LogIn />;
@@ -53,7 +66,7 @@ function App() {
     }
   };
 
-  const contextValue = { user, route, handleSignIn, handleSignOut, list };
+  const contextValue = { user, route, handleSignIn, handleSignOut, list, handleSearch, searchKey, setSearchKey, handleNewLikes, likedItems };
   return (
     <AppContext.Provider value={contextValue}>
       <>

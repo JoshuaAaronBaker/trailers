@@ -4,7 +4,6 @@ import Media from './Media';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
 const Row = ({ title, fetchURL, rowId, videos, likedItems, handleNewLikes }) => {
-  console.log(fetchURL);
 
   const [media, setMedia] = useState([]);
 
@@ -67,7 +66,7 @@ const Row = ({ title, fetchURL, rowId, videos, likedItems, handleNewLikes }) => 
 
     <>
       <h2 className='text-white font-bold md:text-2xl p-4 mt-8 mb-3 ml-4'>{media.length === 0 ? null : title}</h2>
-      <div className='relative flex items-center group mb-10 ml-4 z-50'>
+      <div className='relative flex items-center group mb-10 ml-4'>
 
         <MdChevronLeft className={`text-white bg-transparent left-0 absolute hover:opacity-100 cursor-pointer z-10 hidden invisible lg:visible md:visible group-hover:block ${!isMoved && ' lg:invisible md:invisible'}`} size={60}
           onClick={() => handleSlider('left')}

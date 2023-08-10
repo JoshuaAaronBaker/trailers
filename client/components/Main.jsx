@@ -119,7 +119,7 @@ const Main = ({ handleNewLikes, likedItems }) => {
   return (
     <div className="w-full h-[700px] md:h-[800px] xl:h-[1000px] text-white">
       <div className="w-full h-full">
-        <div className="absolute w-full h-[700px]  md:h-[800px] xl:h-[1000px] bg-gradient-to-t from-black" />
+        <div className="absolute w-full h-[710px]  md:h-[810px] xl:h-[1010px] bg-gradient-to-t from-black" />
         {playTrailer
           ? <Youtube
             videoId={key?.key}
@@ -131,7 +131,7 @@ const Main = ({ handleNewLikes, likedItems }) => {
               title: '',
               playerVars: {
                 autoplay: 1,
-                controls: 0,
+                controls: 1,
                 cc_load_policy: 0,
                 fs: 0,
                 iv_load_policy: 0,
@@ -142,7 +142,7 @@ const Main = ({ handleNewLikes, likedItems }) => {
             }}
           />
           : null}
-        {playTrailer ? <button className='absolute z-10 bottom-4 ml-4 border bg-gray-300 text-black border-gray-300 py-2 px-5 hover:bg-red-600 hover:border-red-600 hover:text-gray-300' onClick={() => closeTrailer()}>Close</button> : null}
+        {playTrailer ? <button className='absolute z-10 bottom-12 ml-4 border bg-gray-300 text-black border-gray-300 py-2 px-5 hover:bg-red-600 hover:border-red-600 hover:text-gray-300' onClick={() => closeTrailer()}>Close</button> : null}
         <img className="w-full h-full object-cover" src={`https://image.tmdb.org/t/p/original${banner?.backdrop_path}`} alt={media?.title} />
         <div className="absolute w-full top-[20%] p-4 md:p-8">
           <h1 className="text-3xl md:text-5xl font-bold">{banner?.title}</h1>

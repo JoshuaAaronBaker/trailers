@@ -122,7 +122,7 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
           <div className="white-space-normal text-xs md:text-sm lg:text-base font-bold flex justify-center items-center text-center h-full">
             <div className="flex-wrap">
               <p className="mb-2">
-                {truncateString(title || original_title || name || media_type || 'Title Unavailable', 35)}
+                {truncateString(title || original_title || name || media_type || 'Title Unavailable', 30)}
               </p>
               <div>
                 <a
