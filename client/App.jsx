@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -53,13 +55,37 @@ function App() {
 
   const handleNewLikes = item => {
     setLikedItems(prevLikedItems => [...prevLikedItems, item]);
+    toast.success(`${item.title} was added to favorites`, {
+      position: 'bottom-center',
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark'
+    });
+  };
+
+  const handleRemoveLikes = item => {
+    toast.error(`${item.title} was removed from favorites`, {
+      position: 'bottom-center',
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark'
+    });
+    setLikedItems(prevLikedItems => [...prevLikedItems]);
   };
 
   const renderPage = () => {
     const { path } = route;
 
     if (path === '') {
-      return <Home handleNewLikes={handleNewLikes} likedItems={likedItems}/>;
+      return <Home handleNewLikes={handleNewLikes} likedItems={likedItems} handleRemoveLikes={handleRemoveLikes} />;
     }
     if (path === 'sign-in') {
       return <LogIn />;
@@ -69,12 +95,23 @@ function App() {
     }
   };
 
-  const contextValue = { user, route, handleSignIn, handleSignOut, list, handleSearch, searchKey, setSearchKey, handleNewLikes, likedItems, updateKey };
+  const contextValue = { user, route, handleSignIn, handleSignOut, list, handleSearch, searchKey, setSearchKey, handleNewLikes, handleRemoveLikes, likedItems, updateKey };
   return (
     <AppContext.Provider value={contextValue}>
       <>
         <Navbar />
         {renderPage()}
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light" />
       </>
     </AppContext.Provider>
   );

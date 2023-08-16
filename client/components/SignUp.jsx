@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import AppContext from '../lib/AuthContext';
 import Redirect from './Redirect';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
 
@@ -35,6 +36,7 @@ const SignUp = () => {
           value.handleSignIn(result);
         }
       }).catch(err => console.error(err));
+
   };
 
   if (value.user && window.localStorage.getItem('trailerflix-jwt')) {

@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Media from './Media';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
-const Row = ({ title, fetchURL, rowId, videos, likedItems, handleNewLikes }) => {
+const Row = ({ title, fetchURL, rowId, videos, likedItems, handleNewLikes, handleRemoveLikes }) => {
 
   const [media, setMedia] = useState([]);
 
@@ -73,7 +73,7 @@ const Row = ({ title, fetchURL, rowId, videos, likedItems, handleNewLikes }) => 
         />
         <div id={'slider' + rowId} className='w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth relative scrollbar-hide overflow-y-hidden' ref={rowRef}>
           {validMedia.map((item, id) => {
-            return <Media key={id} item={item} rowId={rowId} handleNewLikes={handleNewLikes} likedItems={likedItems}/>;
+            return <Media key={id} item={item} rowId={rowId} handleNewLikes={handleNewLikes} likedItems={likedItems} handleRemoveLikes={handleRemoveLikes}/>;
           })}
         </div>
         <MdChevronRight className='text-white bg-transparent right-0 absolute hover:opacity-100 cursor-pointer z-10 hidden invisible lg:visible md:visible group-hover:block' size={60}

@@ -5,7 +5,7 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Player from './Player';
 import AppContext from '../lib/AuthContext';
 
-const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
+const Media = ({ item, rowId, handleNewLikes, handleRemoveLikes, likedItems }) => {
   const contextValue = useContext(AppContext);
 
   const [watchClicked, setWatchClicked] = useState(false);
@@ -98,7 +98,7 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
       })
         .then(response => {
           setIsLiked(false);
-          handleNewLikes([]);
+          handleRemoveLikes(item);
         })
         .catch(error => {
           console.error('Fetch failed during DELETE', error);

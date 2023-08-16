@@ -4,7 +4,7 @@ import axios from 'axios';
 import Youtube from 'react-youtube';
 import AppContext from '../lib/AuthContext';
 
-const Main = ({ handleNewLikes, likedItems }) => {
+const Main = ({ handleNewLikes, likedItems, handleRemoveLikes }) => {
   const [media, setMedia] = useState([]);
   const [banner, setBanner] = useState();
   const [key, setKey] = useState(null);
@@ -99,6 +99,7 @@ const Main = ({ handleNewLikes, likedItems }) => {
 
   const handleUnlike = () => {
     const token = window.localStorage.getItem('trailerflix-jwt');
+    const item = banner;
     if (token && contextValue?.user?.user) {
       axios.delete('/auth/unlike', {
         headers: {
@@ -109,7 +110,7 @@ const Main = ({ handleNewLikes, likedItems }) => {
       })
         .then(response => {
           setUserLikes([]);
-          handleNewLikes([]);
+          handleRemoveLikes(item);
         })
         .catch(error => {
           console.error('Fetch failed during DELETE', error);
@@ -162,10 +163,10 @@ const Main = ({ handleNewLikes, likedItems }) => {
               : null}
             {contextValue?.user?.user && banner && userLikes.includes(banner.id)
               ? (
-                <button className="border text-gray-300 bg-green-600 py-2 px-5 ml-4 hover:" onClick={() => handleUnlike()}>Liked</button>
+                <button className="border text-gray-300 bg-green-600 py-2 px-5 ml-4 hover:bg-red-600 ease-in duration-200" onClick={() => handleUnlike()}>Liked</button>
                 )
               : (
-                <button className="border text-gray-300 py-2 px-5 ml-4" onClick={contextValue?.user?.user ? () => handleLikes() : () => setLikeModal(true)}>Add to List</button>
+                <button className="border text-gray-300 py-2 px-5 ml-4 hover:bg-green-600 ease-in duration-200" onClick={contextValue?.user?.user ? () => handleLikes() : () => setLikeModal(true)}>Add to List</button>
                 )}
             {likeModal
               ? (<div className='fixed inset-0 bg-black/60 flex justify-center items-center z-50'>
