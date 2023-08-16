@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import debounce from 'lodash.debounce';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import SearchResults from './SearchResults';
 import AppContext from '../lib/AuthContext';
@@ -44,18 +45,18 @@ const Navbar = () => {
   if (window.localStorage.getItem('trailerflix-jwt')) {
     return (
       <div className={`flex items-center justify-between p-4 z-[100] w-full fixed top-0 ${isScrolled && 'bg-black ease-in-out duration-500'}`}>
-        <a className='text-red-600 text-3xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
+        <a className='text-red-600 text-3xl font-bold cursor-pointer' href='#'>TRAILERSFLIX</a>
         <div>
           <div onClick={() => handleMenu()} className='text-white z-[100] block md:hidden'>
             {!menu ? <AiOutlineMenu size={40} /> : <AiOutlineClose size={40} />}
           </div>
           <div className={menu ? 'fixed left-0 top-0 w-[70%] h-full border-r-gray-900 bg-black ease-in-out duration-500' : 'ease-in-out duration-500 fixed left-[-100%] top-0'}>
             <div className='flex items-center p-4'>
-              <a className='text-red-600 text-4xl font-bold cursor-pointer' onClick={() => handleMenu()} href='#'>TRAILERFLIX</a>
+              <a className='text-red-600 text-4xl font-bold cursor-pointer' onClick={() => handleMenu()} href='#'>TRAILERSFLIX</a>
             </div>
             <div className="p-4">
-              <form action="" className='relative mx-auto' onSubmit={event => value.handleSearch(event)}>
-                <input type="search" onChange={e => value.setSearchKey(e.target.value)} className='text-white cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outine-non focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4' />
+              <form action="" className='relative mx-auto' onSubmit={event => () => value.handleSearch(event)}>
+                <input type="search" onChange={debounce(value.updateKey, 200)} className='text-white cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outine-non focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4' />
                 <AiOutlineSearch size={40} className="text-white absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5" />
               </form>
               {value.searchKey && (
@@ -82,7 +83,7 @@ const Navbar = () => {
           </div>
           <div className='hidden md:flex items-center gap-5'>
             <form action="" className='relative mx-auto w-max' onSubmit={event => value.handleSearch(event)}>
-              <input type="search" onChange={e => value.setSearchKey(e.target.value)} className='text-white cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outine-non focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4' />
+              <input type="search" onChange={debounce(value.updateKey, 200)} className='text-white cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outine-non focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4' />
               <AiOutlineSearch size={40} className="text-white absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5" />
             </form>
             {value.searchKey && (
@@ -115,7 +116,7 @@ const Navbar = () => {
   }
   return (
     <div className={`flex items-center justify-between p-4 z-[100] w-full fixed top-0 ${isScrolled && 'bg-black ease-in-out duration-500'}`}>
-      <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERFLIX</a>
+      <a className='text-red-600 text-4xl font-bold cursor-pointer' href='#'>TRAILERSFLIX</a>
       <div onClick={() => handleMenu()} className='text-white z-[100] block md:hidden'>
         {!menu ? <AiOutlineMenu size={40} /> : <AiOutlineClose size={40} />}
       </div>
@@ -134,7 +135,7 @@ const Navbar = () => {
       </div>
       <div className={menu ? 'fixed left-0 top-0 w-[70%] h-full border-r-gray-900 bg-black ease-in-out duration-500' : 'ease-in-out duration-500 fixed left-[-100%]'}>
         <div className='flex items-center p-4'>
-          <a className='text-red-600 text-4xl font-bold cursor-pointer' onClick={() => handleMenu()} href='#'>TRAILERFLIX</a>
+          <a className='text-red-600 text-4xl font-bold cursor-pointer' onClick={() => handleMenu()} href='#'>TRAILERSFLIX</a>
         </div>
         <div className="p-4">
           <form action="" className='relative mx-auto' onSubmit={event => value.handleSearch(event)}>

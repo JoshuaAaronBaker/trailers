@@ -37,6 +37,13 @@ function App() {
   };
 
   const [searchKey, setSearchKey] = useState('');
+  const updateKey = e => setSearchKey(e?.target?.value);
+
+  useEffect(() => {
+    if (searchKey) {
+      document.body.style.overflowY = 'hidden';
+    } else document.body.style.overflowY = 'visible';
+  });
 
   const handleSearch = event => {
     event.preventDefault();
@@ -66,7 +73,7 @@ function App() {
     }
   };
 
-  const contextValue = { user, route, handleSignIn, handleSignOut, list, handleSearch, searchKey, setSearchKey, handleNewLikes, likedItems };
+  const contextValue = { user, route, handleSignIn, handleSignOut, list, handleSearch, searchKey, setSearchKey, handleNewLikes, likedItems, updateKey };
   return (
     <AppContext.Provider value={contextValue}>
       <>

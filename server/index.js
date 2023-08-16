@@ -7,6 +7,7 @@ const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const errorMiddleware = require('./error-middleware');
 const authorizationMiddleware = require('./authorization-middleware');
+const cors = require('cors');
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -16,6 +17,8 @@ const db = new pg.Pool({
 });
 
 const app = express();
+
+app.use(cors());
 
 app.use(staticMiddleware);
 app.use(express.json());

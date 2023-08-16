@@ -11,6 +11,7 @@ const Main = ({ handleNewLikes, likedItems }) => {
   const [playTrailer, setPlayTrailer] = useState(false);
   const [noTrailer, setNoTrailer] = useState(false);
   const [userLikes, setUserLikes] = useState([]);
+  const [likeModal, setLikeModal] = useState(false);
 
   const contextValue = useContext(AppContext);
   // const banner = media[Math.floor(Math.random() * media.length)];
@@ -161,11 +162,22 @@ const Main = ({ handleNewLikes, likedItems }) => {
               : null}
             {contextValue?.user?.user && banner && userLikes.includes(banner.id)
               ? (
-                <button className="border text-gray-300 bg-green-600 py-2 px-5 ml-4" onClick={() => handleUnlike()}>Liked</button>
+                <button className="border text-gray-300 bg-green-600 py-2 px-5 ml-4 hover:" onClick={() => handleUnlike()}>Liked</button>
                 )
               : (
-                <button className="border text-gray-300 py-2 px-5 ml-4" onClick={() => handleLikes()}>Add to List</button>
+                <button className="border text-gray-300 py-2 px-5 ml-4" onClick={contextValue?.user?.user ? () => handleLikes() : () => setLikeModal(true)}>Add to List</button>
                 )}
+            {likeModal
+              ? (<div className='fixed inset-0 bg-black/60 flex justify-center items-center z-50'>
+                <div className='min-w-[700px] mx-auto bg-black text-white text-center'>
+                  <div className='max-w-[320px] mx-auto py-16'>
+                    <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <h1 className='text-lg'>Sorry, you need to be signed into an account in order to like movies.</h1>
+                    <button className='bg-red-600 px-6 py-2 mt-6 rounded cursor-pointer' onClick={() => setLikeModal(false)}>Ok</button>
+                  </div>
+                </div>
+              </div>)
+              : null}
           </div>
           <p className="text-gray-400 text-sm">Released:{banner?.release_date}</p>
           <p className="w-full md:max-w-[70%] lg:max-w-[50%] xl:max-w-[35%] text-gray-200">{banner?.overview}</p>
