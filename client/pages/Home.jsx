@@ -13,7 +13,7 @@ const Home = ({ handleNewLikes, likedItems, handleRemoveLikes }) => {
     return (
       <>
         <Main handleNewLikes={handleNewLikes} likedItems={likedItems} handleRemoveLikes={handleRemoveLikes}/>
-        <Row rowId='0' title={`${(token && contextValue.user?.user) ? contextValue?.user?.user.username : null}'s List`} fetchURL='/auth/get-likes'
+        <Row rowId='0' title={`${(token && contextValue.user?.user) ? contextValue?.user?.user.username : null}'s Favorites`} fetchURL='/auth/get-likes'
           likedItems={likedItems} handleNewLikes={handleNewLikes} handleRemoveLikes={handleRemoveLikes}/>
         <Row rowId='1' title='Top 10 Movies in the U.S. Today' fetchURL={requests.popular} likedItems={likedItems} handleNewLikes={handleNewLikes} handleRemoveLikes={handleRemoveLikes} />
         <Row rowId='2' title='Trending Now' fetchURL={requests.trending} likedItems={likedItems} handleNewLikes={handleNewLikes} handleRemoveLikes={handleRemoveLikes} />
