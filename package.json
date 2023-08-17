@@ -5,6 +5,7 @@
   "description": "A full stack JavaScript solo project.",
   "main": "server/index.js",
   "scripts": {
+    "prod:db:import": "sh database/prod-import.sh",
     "start": "NODE_ENV=production node .",
     "dev": "NODE_ENV=development nodemon .",
     "build": "NODE_ENV=production webpack",
