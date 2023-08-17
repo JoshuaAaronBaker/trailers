@@ -5,7 +5,7 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Player from './Player';
 import AppContext from '../lib/AuthContext';
 
-const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
+const Media = ({ item, rowId, handleNewLikes, handleRemoveLikes, likedItems }) => {
   const contextValue = useContext(AppContext);
 
   const [watchClicked, setWatchClicked] = useState(false);
@@ -13,10 +13,11 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
   const [key, setKey] = useState('');
   const [playTrailer, setPlayTrailer] = useState(false);
   const [noTrailer, setNoTrailer] = useState(false);
+  const [likeModal, setLikeModal] = useState(false);
 
   useEffect(() => {
     const token = window.localStorage.getItem('trailerflix-jwt');
-    if (token && contextValue.user?.user) {
+    if (token && contextValue?.user?.user) {
       axios.get('/auth/get-likes', {
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
       })
         .then(response => {
           setIsLiked(false);
-          handleNewLikes([]);
+          handleRemoveLikes(item);
         })
         .catch(error => {
           console.error('Fetch failed during DELETE', error);
@@ -122,7 +123,7 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
           <div className="white-space-normal text-xs md:text-sm lg:text-base font-bold flex justify-center items-center text-center h-full">
             <div className="flex-wrap">
               <p className="mb-2">
-                {truncateString(title || original_title || name || media_type || 'Title Unavailable', 35)}
+                {truncateString(title || original_title || name || media_type || 'Title Unavailable', 30)}
               </p>
               <div>
                 <a
@@ -140,11 +141,23 @@ const Media = ({ item, rowId, handleNewLikes, likedItems }) => {
                 <FaHeart className="absolute top-4 left-4 text-red-600" onClick={() => handleUnlike()}/>
                 )
               : (
-                <FaRegHeart className="absolute top-4 left-4 hover:text-red-600 ease-in duration-100" onClick={() => handleLikes()}/>
+                <FaRegHeart className="absolute top-4 left-4 hover:text-red-600 ease-in duration-100" onClick={contextValue.user?.user ? () => handleLikes() : () => setLikeModal(true)}/>
                 )}
           </p>
         </div>
       </div>
+      {likeModal
+        ? (<div className='fixed inset-0 bg-black/60 flex justify-center items-center z-50'>
+          <div className='min-w-[700px] mx-auto bg-black text-white text-center'>
+            <div className='max-w-[350px] mx-auto py-16'>
+              <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <p className='text-lg'>Sorry you need to be signed into an account</p>
+              <p className='text-lg'>in order to like a movie.</p>
+              <button className='bg-red-600 px-6 py-2 mt-6 rounded cursor-pointer' onClick={() => setLikeModal(false)}>Ok</button>
+            </div>
+          </div>
+        </div>)
+        : null}
     </>
   );
 };
