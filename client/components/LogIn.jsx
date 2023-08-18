@@ -17,7 +17,7 @@ const LogIn = () => {
   };
 
   const handleDemoUser = () => {
-    setCredentials({ username: 'demo', password: 'user' });
+    setCredentials({ username: 'baker', password: 'baker' });
   };
 
   const handleSubmit = event => {
