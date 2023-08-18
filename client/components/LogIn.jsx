@@ -56,7 +56,7 @@ const LogIn = () => {
               <input className='p-3 my-2 bg-gray-600 rounded' required autoFocus id='password' name='password' type="password" onChange={handleChange} placeholder='Password' value={credentials.password}/>
               <button type='submit' className='bg-red-600 py-3 my-6 rounded font-bold'>Sign In</button>
               <div>
-                <button type='submit' onClick={handleDemoUser}>Sign-in with Demo User</button>
+                <button type='submit' className='text-white' onClick={handleDemoUser}>Sign-in with Demo User</button>
               </div>
             </form>
           </div>
