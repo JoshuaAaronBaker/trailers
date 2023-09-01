@@ -51,7 +51,7 @@ You can try the site out here
 - NPM 6 or higher
 
 ### Getting Started
-1. Make and account with [The Movie DB](https://www.themoviedb.org/signup) to get a a token secret in order to use the API.
+1. Make an account with [The Movie DB](https://www.themoviedb.org/signup) to get a a token secret in order to use the API.
 
 2. Install TailwindCSS according to their documentation [https://tailwindcss.com/docs/installation](https://tailwindcss.com/docs/installation)
 
